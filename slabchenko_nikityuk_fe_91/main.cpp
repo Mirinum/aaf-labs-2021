@@ -36,12 +36,12 @@ int main(){
 			getline(cin,command,';');
 			string stripped_command="";
 			stripped_command = trim(command);
+			replace( stripped_command.begin(), stripped_command.end(), '\n', ' ');
 			cout << "Entered command: " << stripped_command << endl;
 			if(stripped_command == ".EXIT") return 0;
 			if (regex_match (stripped_command, regex("(CREATE|create)\\s+[a-zA-Z][a-zA-Z0-9]*\\s*\\(\\s*\\w+(\\s+(indexed|INDEXED))?\\s*(,\\s*\\w+(\\s+(indexed|INDEXED))?\\s*)*\\)") )){
 				//smatch match;
 				//regex_search(stripped_command.begin(), stripped_command.end(), match, "create\\s([a-zA-Z][a-zA-Z0-9]).*");
-				replace( stripped_command.begin(), stripped_command.end(), '\n', ' ');
 				columns.clear();
 				indexes.clear();
 				tablename = "";
@@ -72,7 +72,7 @@ int main(){
 					cout << endl;
 				}
 			}
-			else if(regex_match (stripped_command, regex("(INSERT|insert)\\s+(INTO\\s+|into\\s+)?\\w+\\s*\\(\\s*['`\"][^'\"`]+['`\"]\\s*(,\\s*['`\"][^'\"`]+['`\"]\\s*){"+to_string(columns.size()-1)+"}\\)") )){
+			else if(regex_match (stripped_command, regex("(INSERT|insert)\\s+(INTO\\s+|into\\s+)?[a-zA-Z][a-zA-Z0-9]*\\s*\\(\\s*['`\"][^'\"`]+['`\"]\\s*(,\\s*['`\"][^'\"`]+['`\"]\\s*){"+to_string(columns.size()-1)+"}\\)") )){
 				vector<string> insertion_values;
 				string insertion_table;
 				smatch name_match, values_match;
@@ -89,7 +89,21 @@ int main(){
 					cout << columns[i] << " inserted as " << insertion_values[i] << endl;
 				}
 			}
-			else if(regex_match (stripped_command, regex("(SELECT|select)\\s+\\w+(\\s*,\\s*\\w+\\s*)*\\s+(FROM\\s+|from\\s+)\\w+(\\s*,\\w+\\s*)*\\s*((\\s+(WHERE|where)\\s+\\w+(\\s*,\\w+\\s*)*\\s+)|(\\s+(GROUP_BY|group_by)\\s+\\w+(\\s*,\\w+\\s*)*\\s+))?"))){
+			else if(regex_match (stripped_command, regex("(SELECT|select)\\s+((\\w+\\s*(,\\s*\\w+\\s*)*)|\\*\\s*)(,\\s*(COUNT\\(\\w+\\)|COUNT_DISTINCT\\(\\w+\\)|MAX_LEN\\(\\w+\\)|AVG_LEN\\(\\w+\\)))*\\s+((from|FROM)\\s+[a-zA-Z][a-zA-Z0-9]*\\s*)(\\s*(where|WHERE)\\s+((\\w+)|(['\"`]\\w+['\"`]))\\s*[=!<>]{1,2}\\s*((\\w+)|(['\"`]\\w+['\"`])))?(\\s*(GROUP_BY|group_by)\\s+\\w+\\s*(,\\s*\\w+\\s*)*)?"))){
+				cout << "Selecting "; 
+				regex selection_regex("(SELECT|select)\\s+(.+)\\s+(FROM|from)");
+				smatch selection_match;
+				regex_search(stripped_command, selection_match, selection_regex);
+				string select_parameter = selection_match.str(2);
+				cout << select_parameter;
+				regex name_regex ("from\\s+([a-zA-Z][a-zA-Z0-9]*)|FROM\\s+([a-zA-Z][a-zA-Z0-9]*)");
+				smatch name_match;
+				regex_search(stripped_command, name_match, name_regex);
+				string table_name = name_match.str(0).substr(5);
+				cout << " from table " << table_name << endl;
+
+			}
+			else if(regex_match (stripped_command, regex("(DELETE|delete)(\\s+from|\\s+FROM)?\\s+[a-zA-Z][a-zA-Z0-9]*(\\s+(where|WHERE)\\s+((\\w+)|(['\"`]\\w+['\"`]))\\s*[=!<>]{1,2}\\s*((\\w+)|(['\"`]\\w+['\"`]))?)?"))){
 				cout << "Deletion command" << endl;
 			}
 			else{
