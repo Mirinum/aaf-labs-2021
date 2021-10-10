@@ -17,8 +17,7 @@ void otools::colored_out(string s, color c){
 }
 
 
-vector<string> otools::explode(string const & s, char delim)
-{
+vector<string> otools::explode(string const & s, char delim){
     vector<string> result;
     istringstream iss(s);
     for (string token; getline(iss, token, delim);)
