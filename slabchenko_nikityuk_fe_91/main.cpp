@@ -90,7 +90,7 @@ int main(){
 				}
 			}
 			else if(regex_match (stripped_command, regex("(SELECT|select)\\s+\\w+(\\s*,\\s*\\w+\\s*)*\\s+(FROM\\s+|from\\s+)\\w+(\\s*,\\w+\\s*)*\\s*((\\s+(WHERE|where)\\s+\\w+(\\s*,\\w+\\s*)*\\s+)|(\\s+(GROUP_BY|group_by)\\s+\\w+(\\s*,\\w+\\s*)*\\s+))?"))){
-				cout << "SHITTTT" << endl;
+				cout << "Deletion command" << endl;
 			}
 			else{
 				cout << "Command wasn't understood" << endl;
