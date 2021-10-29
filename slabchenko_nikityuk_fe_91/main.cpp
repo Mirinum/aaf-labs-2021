@@ -16,7 +16,7 @@ int main(){
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			regex command_check("\\s*(CREATE|INSERT|SELECT|DELETE)\\s+.*\\;", regex_constants::icase);
 			regex create("\\s*create\\s+([a-zA-Z]\\w*)\\s*\\((.*)\\)\\s*\\;", regex_constants::icase);
-			regex insert("\\s*insert\\s+(?:into\\s+)?([a-zA-Z]\\w*)\\s*\\((.*)\\)\\;", regex_constants::icase);
+			regex insert("\\s*insert\\s+(?:into\\s+)?([a-zA-Z]\\w*)\\s*\\((.*)\\)\\s*\\;", regex_constants::icase);
 			regex select("^\\s*select\\s+(.*)\\s+from\\s+([a-zA-Z]\\w*)(?:\\s+where\\s+(.*))?\\s*;$", regex_constants::icase);
 			regex remove("^\\s*delete\\s+(?:from\\s+)?([a-zA-Z]\\w*)\\s+where\\s+(.+(?:=|!=|<|>|<=|>=).+);$", regex_constants::icase);
 			regex create_params("^\\s*(?:(indexed)\\s+)?([a-zA-Z]\\w*)\\s*$", regex_constants::icase);
