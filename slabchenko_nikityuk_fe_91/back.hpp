@@ -54,13 +54,11 @@ public:
 
 
 class DBexception : public exception{
-	const char* errorMSG;
-public:
-	DBexception(string s){errorMSG = s.c_str();}
-	const char * what () const throw ()
-    {
-    	return errorMSG;
-    }
+	public:
+	string s;
+	DBexception(std::string ss) : s(ss) {}
+	~DBexception() throw () {}
+	const char* what() const throw() { return s.c_str(); }
 };
 
 #endif

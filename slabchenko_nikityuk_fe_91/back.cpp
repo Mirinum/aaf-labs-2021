@@ -45,6 +45,13 @@ table::table(string n, vector<string> c, vector<bool> ind, unsigned int c_n){
 	if(find(ind.begin(), ind.end(), true) == ind.end()){
 		throw DBexception("At least one column has to be indexed");
 	}
+	for(int i = 0; i < c.size(); i++){
+		for(int j = i+1; j < c.size(); j++){
+			if(c[i] == c[j]){
+				throw DBexception("Error, repeated columns");
+			}
+		}
+	}
 	for(int i = 0; i < c_n; i++){
 		columns.insert(pair<int, string>(i, c[i]));
 		if(ind[i]){
