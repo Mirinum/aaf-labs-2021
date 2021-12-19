@@ -14,12 +14,13 @@ int main(){
 			if(command == ".EXIT;") return 0;
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			regex command_check("\\s*(CREATE|INSERT|SELECT|DELETE)\\s+.*\\;", regex_constants::icase);
+			regex command_check("\\s*(create|insert|select|delete)\\s+.*\\;", regex_constants::icase);
 			regex create("\\s*create\\s+([a-zA-Z]\\w*)\\s*\\((.*)\\)\\s*\\;", regex_constants::icase);
 			regex insert("\\s*insert\\s+(?:into\\s+)?([a-zA-Z]\\w*)\\s*\\((.*)\\)\\s*\\;", regex_constants::icase);
 			regex select("^\\s*select\\s+(.*)\\s+from\\s+([a-zA-Z]\\w*)(?:\\s+where\\s+(.*))?\\s*;$", regex_constants::icase);
+			regex remove_all("^\\s*delete\\s+(?:from\\s+)?([a-zA-Z]\\w*);$", regex_constants::icase);
 			regex remove("^\\s*delete\\s+(?:from\\s+)?([a-zA-Z]\\w*)\\s+where\\s+(.+(?:=|!=|<|>|<=|>=).+);$", regex_constants::icase);
-			regex create_params("^\\s*(?:(indexed)\\s+)?([a-zA-Z]\\w*)\\s*$", regex_constants::icase);
+			regex create_params("^\\s*([a-zA-Z]\\w*)(?:(\\s+indexed))?\\s*$", regex_constants::icase);
 			regex insert_params("(['\"`])([^'\"`]*)\\1");
 			smatch m;
 			replace( command.begin(), command.end(), '\n', ' ');
@@ -46,13 +47,13 @@ int main(){
 					vector<bool> indexes;
 					for(int i = 0; i < cols.size(); i++){
 						if(regex_search(cols[i], m, create_params) != 0){
-							string indexing_parameter = m[1];
-							transform(indexing_parameter.begin(), indexing_parameter.end(), indexing_parameter.begin(), ::toupper);
-							if(indexing_parameter == "INDEXED")
-								indexes.push_back(true);
+							string indexing_parameter = m[2];
+							//transform(indexing_parameter.begin(), indexing_parameter.end(), indexing_parameter.begin(), ::toupper);
+							if(indexing_parameter != "")
+								indexes.push_back(1);
 							else
-								indexes.push_back(false);
-							columns.push_back(m[2]);
+								indexes.push_back(0);
+							columns.push_back(m[1]);
 						}
 						else{
 							throw DBexception("Syntax error!");
@@ -95,7 +96,14 @@ int main(){
 				}
 			}
 			if(cmd == "DELETE"){
-				if(regex_search(command, m, remove) != 0){
+				if(regex_search(command, m, remove_all) != 0){
+					for(int i = 0; i < tables.size(); i++){
+						if(tables[i].get_name() == m[1]){
+							tables[i].remove("'1'='1'");
+						}
+					}
+				}
+				else if(regex_search(command, m, remove) != 0){
 					for(int i = 0; i < tables.size(); i++){
 						if(tables[i].get_name() == m[1]){
 							tables[i].remove(m[2]);
