@@ -81,7 +81,23 @@ void table::insert(vector<string> d){
 	cout << "Inserted 1 row into " << name << endl;
 }
 
-void table::select(vector<string> source, string condition){
+void table::select(vector<string> source, string condition, vector<string> group_by){
+
+	if(group_by.size()){
+		for(int i = 0; i < source.size(); i++)
+			if(find(group_by.begin(), group_by.end(), source[i]) == group_by.end())
+				throw DBexception("Syntax error, `from` statement should have the same coulumns as the `group_by` statement");
+			else
+				cout << setw(30) << source[i];
+		cout << endl;
+
+		map <string, vector<node*>> aggregated;
+
+		//TODO DO IT
+
+		return;
+	}
+
 	vector<bool> printable;
 	if(source[0] == "*"){
 		printable = vector<bool>(columns.size(), true);

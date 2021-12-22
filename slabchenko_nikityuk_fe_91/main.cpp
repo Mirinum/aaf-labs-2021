@@ -17,7 +17,7 @@ int main(){
 			regex command_check("\\s*(create|insert|select|delete)\\s+.*\\;", regex_constants::icase);
 			regex create("\\s*create\\s+([a-zA-Z]\\w*)\\s*\\((.*)\\)\\s*\\;", regex_constants::icase);
 			regex insert("\\s*insert\\s+(?:into\\s+)?([a-zA-Z]\\w*)\\s*\\((.*)\\)\\s*\\;", regex_constants::icase);
-			regex select("^\\s*select\\s+(.*)\\s+from\\s+([a-zA-Z]\\w*)(?:\\s+where\\s+(.*))?\\s*;$", regex_constants::icase);
+			regex select("^\\s*select\\s+(.*)\\s+from\\s+([a-zA-Z]\\w*)(?:\\s+where\\s+(.*?))?(?:\\s+group_by\\s+(.*))?\\s*;$", regex_constants::icase);
 			regex remove_all("^\\s*delete\\s+(?:from\\s+)?([a-zA-Z]\\w*);$", regex_constants::icase);
 			regex remove("^\\s*delete\\s+(?:from\\s+)?([a-zA-Z]\\w*)\\s+where\\s+(.+(?:=|!=|<|>|<=|>=).+);$", regex_constants::icase);
 			regex create_params("^\\s*([a-zA-Z]\\w*)(?:(\\s+indexed))?\\s*$", regex_constants::icase);
@@ -120,11 +120,14 @@ int main(){
 					string name = m[2];
 					string src = m[1];
 					string condition = m[3];
+					string grouping = m[4];
 					src.erase(remove_if(src.begin(), src.end(), ::isspace), src.end());
+					src.erase(remove_if(grouping.begin(), grouping.end(), ::isspace), grouping.end());
 					vector<string> source = otools::explode(src, ',');
+					vector<string> groups = otools::explode(grouping, ',');
 					for(int i = 0; i < tables.size(); i++){
 						if(tables[i].get_name() == name){
-							tables[i].select(source, condition);
+							tables[i].select(source, condition, groups);
 						}
 					}
 				}

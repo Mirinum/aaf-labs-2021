@@ -49,7 +49,7 @@ public:
 	void insert(vector<string> d);
 	void remove(string condition);
 	string get_name(){return name;}
-	void select(vector<string> source, string condition);
+	void select(vector<string> source, string condition, vector<string> group_by);
 };
 
 
