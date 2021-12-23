@@ -91,9 +91,13 @@ void table::select(vector<string> source, string condition, vector<string> group
 				cout << setw(30) << source[i];
 		cout << endl;
 
-		map <string, vector<node*>> aggregated;
+		map <vector<string>, vector<int>> aggregated;
 
-		//TODO DO IT
+		for(int i = 0; i < data.size(); i++){
+
+			
+
+		}
 
 		return;
 	}
