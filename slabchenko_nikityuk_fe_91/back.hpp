@@ -41,6 +41,7 @@ public:
 class table{
 	string name;
 	map<int, string> columns;
+	map<string, int> colnames;
 	string main_index = "";
 	map<string, map<string, vector<node*>>> indexes; // indexes[name of the index][index of needed row (because of multiple possible rows with the same value)][value of the indexed column]
 	VectorList data;
@@ -58,7 +59,9 @@ class DBexception : public exception{
 	string s;
 	DBexception(std::string ss) : s(ss) {}
 	~DBexception() throw () {}
-	const char* what() const throw() { return s.c_str(); }
+	const char* what() const throw() {
+		return s.c_str(); 
+	}
 };
 
 #endif

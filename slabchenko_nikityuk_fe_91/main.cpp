@@ -122,7 +122,7 @@ int main(){
 					string condition = m[3];
 					string grouping = m[4];
 					src.erase(remove_if(src.begin(), src.end(), ::isspace), src.end());
-					src.erase(remove_if(grouping.begin(), grouping.end(), ::isspace), grouping.end());
+					grouping.erase(remove_if(grouping.begin(), grouping.end(), ::isspace), grouping.end());
 					vector<string> source = otools::explode(src, ',');
 					vector<string> groups = otools::explode(grouping, ',');
 					for(int i = 0; i < tables.size(); i++){
